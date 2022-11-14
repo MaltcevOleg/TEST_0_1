@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel = "stylesheet" href = "js/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+  <script src="js/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+</head>
+
+<body>
+<div id = "map" style = "width: 900px; height: 580px"></div>
+<script>
+    // Creating map options
+    var mapOptions = {
+    center: [17.438139, 78.395830],
+    zoom: 10
+  }
+
+    // Creating a map object
+    var map = new L.map('map', mapOptions);
+
+    // Creating a Layer object
+    var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+    // Adding layer to the map
+    map.addLayer(layer);
+
+    // Icon options
+    var iconOptions = {
+    iconUrl: 'icon.png',
+    iconSize: [20, 20]
+  }
+    // Creating a custom  icon
+    var customIcon = L.icon(iconOptions);
+
+    // Creating Marker Options
+    var markerOptions = {
+    title: "MyLocation",
+    clickable: true,
+    draggable: true,
+    icon: customIcon
+  }
+    // Creating a Marker
+    var marker = L.marker([17.438139, 78.395830], markerOptions);
+
+    // Adding popup to the marker
+    marker.bindPopup('Hi welcome to Tutorialspoint').openPopup();
+
+    // Adding marker to the map
+    marker.addTo(map);
+
+    //Creating latlng object
+    var circleCenter=[17.385044,78.486671];
+
+    // Creating curcle
+    // Circle options
+    /*var circleOptions = {
+      color: 'red',
+      fillColor: '#f03',
+      fillOpacity: 0
+    }
+    var circle=L.circle(circleCenter, 50000,circleOptions);
+
+    // Creating rectangle
+   // var rectOptions={color:'red',weight:1}
+    //var rectangle=L.rectangle(latlngs,rectOptions)
+
+    // Creating polygon
+    //var polygon=L.polygon(latlngs,{color:'red'})
+
+    // Creating a polyline
+    //var polylane=L.polyline(latlngs,{color:'red'});
+
+    //Add polyline/polygon*/
+
+    // Creating markers
+    var hydMarker = new L.Marker([17.385044, 78.486671]);
+    var vskpMarker = new L.Marker([17.686816, 83.218482]);
+    var vjwdMarker = new L.Marker([16.506174, 80.648015]);
+
+    // Creating latlng object
+    var latlngs = [
+      [17.385044, 78.486671],
+      [16.506174, 80.648015],
+      [17.686816, 83.218482]
+    ];
+    // Creating a polygon
+    var polygon = L.polygon(latlngs, {color: 'red'});
+    // Creating layer group
+    var layerGroup = L.featureGroup([hydMarker, vskpMarker, vjwdMarker, polygon]);
+    layerGroup.addTo(map);
+    // Creating a circle
+    var circle = L.circle([16.506174, 80.648015], 50000, {color: 'red', fillColor:
+        '#f03', fillOpacity: 0} );
+
+    // Adding circle to the layer group
+    layerGroup.addLayer(circle);
+    layerGroup.setStyle({color:'blue',opacity:.5});
+    layerGroup.bindPopup("Feature Group");
+    layerGroup.addTo(map);
+    //map.on("click", function(e){
+    //  new L.Marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+    //})
+    map.on('click',function (e) {
+      onMapClick(e);
+    });
+    function onMapClick(e) {
+      if (loc1==null){
+        console.log(e)
+        var loc1=new L.marker(e.latlng.lat,e.latlng.lng,{draggable: 'true'});
+        loc1.on('dragend',function (event) {
+
+        });
+        loc1.addTo(map)
+        //map.addLayer(loc1);
+      }
+      else if (loc2==null){
+        console.log(e)
+        var loc2=new L.marker(e.latlng.lat,e.latlng.lng,{draggable: 'true'});
+        loc2.on('dragend',function (event) {
+
+        });
+        loc2.addTo(map)
+        //map.addLayer(loc2);
+      }
+    };
+</script>
+</body>
+</html>

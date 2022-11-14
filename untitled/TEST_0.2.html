@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel = "stylesheet" href = "js/dist/leaflet.css" />
+
+  <!--leaflet routing machine-->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+
+  <script src="js/dist/leaflet.js"></script>
+</head>
+<body>
+<div id = "map" style = "width: 900px; height: 580px"></div>
+<!--leaflet routing machine js-->
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<script>
+  var mapOptions = {
+    center: [17.438139, 78.395830],
+    zoom: 10
+  }
+  var map = new L.map('map', mapOptions);
+  var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+  map.addLayer(layer);
+
+  <!--custom icon-->
+  var customIcon=L.icon({
+    iconUrl:'img/student.png',
+    iconSize:[50,50]
+  })
+//test
+  map.on('click',function (pointOne) {
+    console.log(pointOne)
+  })
+
+  var marker=L.marker([17.438139,78.395830],{icon:customIcon}).addTo(map);
+
+
+  //map click event
+  map.on('click',function (e) {
+    console.log(e)
+    var secondMarker=L.marker([e.latlng.lat,e.latlng.lng]).addTo(map);
+    L.Routing.control({
+      waypoints: [
+        L.latLng(17.438139, 78.395830),
+        L.latLng(e.latlng.lat,e.latlng.lng)
+      ]
+    }).on('routesfound', function (e) {
+      console.log(e)
+      e.routes[0].coordinates.forEach(function (coord,index){
+        setTimeout(()=>{
+          marker.setLatLng([coord.lat,coord.lng])
+        },100*index);
+      })
+    })
+      .addTo(map);
+  })
+
+  // L.Routing.control({
+  //   waypoints: [
+  //     L.latLng(57.74, 11.94),
+  //     L.latLng(57.6792, 11.949)
+  //   ]
+  // }).addTo(map);
+
+</script>
+</body>
+</html>
